@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import type { NodeData, Node, ExpandedMap, AccessChildren, AccessId, SetFlatTree } from "../types";
+import { useState, useEffect, useCallback, type Ref } from "react";
+import type { NodeData, Node, ExpandedMap, AccessChildren, AccessId, SetFlatTree, Refresh } from "../types";
 import { flattenTree } from "../utils";
 
 type UseFlaTreeStateArgs = {
@@ -12,7 +12,7 @@ type UseFlaTreeStateArgs = {
 type UseFlaTreeStateReturn = {
   flatTree: Node[];
   setFlatTree: SetFlatTree;
-  refresh: () => void;
+  refresh: Refresh;
 }
 
 export const useFlatTreeState = ({ tree, expandedMap, accessChildren, accessId }: UseFlaTreeStateArgs): UseFlaTreeStateReturn => {
@@ -24,8 +24,8 @@ export const useFlatTreeState = ({ tree, expandedMap, accessChildren, accessId }
     }  
   }, [tree]);
 
-  const refresh = useCallback(() => 
-    setFlatTree(() => flattenTree({ tree, expandedMap, accessChildren, accessId }))
+  const refresh: Refresh = useCallback((newTree) => 
+    setFlatTree(() => flattenTree({ tree: newTree || tree, expandedMap, accessChildren, accessId }))
   , [tree, expandedMap, accessChildren, accessId, setFlatTree])
 
   return {

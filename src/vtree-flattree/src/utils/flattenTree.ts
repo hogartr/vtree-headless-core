@@ -1,17 +1,18 @@
 import type { ExpandedMap, AccessId, AccessChildren, Node, NodeData } from "../types";
-const ROOT_NODE_ID = "__ROOT_NODE__";
+import { ROOT_NODE_ID } from "../variables/kinds";
 
 type FlattenTree = {
   tree: NodeData[];
   expandedMap: ExpandedMap;
   accessId: AccessId;
   accessChildren: AccessChildren;
+  parent?: Node;
 }
 
-export const flattenTree = ({ tree, expandedMap, accessId, accessChildren }: FlattenTree) => {
+export const flattenTree = ({ tree, expandedMap, accessId, accessChildren, parent }: FlattenTree) => {
   const flatTree: Node[] = [];
 
-  const rootNode: Node = {
+  const rootNode: Node = parent || {
     id: ROOT_NODE_ID,
     parent: null,
     children: null,
@@ -19,6 +20,8 @@ export const flattenTree = ({ tree, expandedMap, accessId, accessChildren }: Fla
     level: -1,
     expanded: true,
   }
+
+  const startLevel = parent ? parent.level + 1 : 0;
   
   const appendNodes = (
     nodes: NodeData[], 
@@ -63,7 +66,7 @@ export const flattenTree = ({ tree, expandedMap, accessId, accessChildren }: Fla
       }
     }
   }
-  appendNodes(tree, flatTree, rootNode, 0, true);
+  appendNodes(tree, flatTree, rootNode, startLevel, true);
 
   return flatTree;
 }

@@ -1,10 +1,9 @@
-
 import { useCallback } from "react";
 import type { Node, NodeId, SetFlatTree, GetNodeById, ExpandedMap, IdToIndex, ToggleNode } from "../types";
 import { isValidNodeId, getVisibleChildren, insertAt, removeAt } from "../utils";
 
 export const useToggleNode = (
-  getNodeById: GetNodeById, 
+  getNodeById: GetNodeById,
   expandedMap: React.RefObject<ExpandedMap>, 
   idToIndex: IdToIndex, 
   setFlatTree: SetFlatTree,

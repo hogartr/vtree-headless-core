@@ -1,0 +1,1 @@
+export const ROOT_NODE_ID = "__ROOT_NODE__";

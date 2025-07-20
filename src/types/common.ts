@@ -6,6 +6,18 @@ export type NodeId = string | number;
 
 export type ToggleNode = (arg: Node | NodeId) => void;
 
+export type DeleteNode = (arg: Node | NodeId) => void;
+
+export type UpdateNode = (arg: Node | NodeId, fields: NodeData) => void;
+
+export type CreateNode = (newNode: NodeData, parent: Node | NodeId, position: "start" | "end" | number) => Node | null;
+
+export type Update = (arg: Node | NodeId) => void;
+
+export type GetNodeById = (id: NodeId) => Node;
+
+export type Refresh = (treeArg?: NodeData[]) => void
+
 export type Node = {
   id: NodeId;
   parent: Node | null;
@@ -15,8 +27,16 @@ export type Node = {
   expanded: boolean;
 };
 
+export type Actions = {
+  create: CreateNode;
+  update: UpdateNode;
+  delete: DeleteNode;
+  getNodeById: GetNodeById;
+  toggle: ToggleNode;
+};
+
 export type FlatTree = {
   data: Node[];
-  refresh: () => void;
-  toggleNode: ToggleNode
+  refresh: Refresh;
+  actions: Actions;
 }
