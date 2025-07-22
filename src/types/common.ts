@@ -10,7 +10,7 @@ export type DeleteNode = (arg: Node | NodeId) => void;
 
 export type UpdateNode = (arg: Node | NodeId, fields: NodeData) => void;
 
-export type CreateNode = (newNode: NodeData, parent: Node | NodeId, position: "start" | "end" | number) => Node | null;
+export type CreateNode = (newNode: NodeData, parent: Node | NodeId, position: "start" | "end" | number) => Node;
 
 export type Update = (arg: Node | NodeId) => void;
 

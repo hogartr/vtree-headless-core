@@ -1,5 +1,16 @@
 import React, { useCallback } from "react";
-import type { Node, NodeId, SetFlatTree, GetNodeById, CreateNode, NodeData, ExpandedMap, AccessId, AccessChildren, IdToIndex } from "../types";
+import type { 
+  Node, 
+  NodeId, 
+  SetFlatTree, 
+  GetNodeById, 
+  CreateNode, 
+  NodeData, 
+  ExpandedMap, 
+  AccessId, 
+  AccessChildren, 
+  IdToIndex 
+} from "../types";
 import { isValidNodeId, flattenTree } from "../utils";
 
 export const useCreateNode = (
@@ -11,6 +22,8 @@ export const useCreateNode = (
   expandedMap: ExpandedMap,
   idToIndex: IdToIndex,
 ): CreateNode => {
+  // accessChildren and accessId are intentionally omitted from the dependency array
+  // because they are not stable and only their initial definitions are needed.
   const createNode: CreateNode = useCallback((newNode, parent, position) => {
     let tempParent = parent;
     if (isValidNodeId(parent)) {
@@ -18,8 +31,16 @@ export const useCreateNode = (
     }
     const parentNode = tempParent as Node;
 
-    if (!newNode || !parentNode) {
-      return null;
+    if (!parentNode) {
+      throw new Error(
+        `Could not resolve a valid parent node. Received: ${JSON.stringify(parent)}`
+      );
+    }
+
+    if (!newNode) {
+      throw new Error(
+        `Cannot create a node: the provided newNode argument is missing or invalid. Received: ${JSON.stringify(newNode)}`
+      );
     }
 
     const flattenedNodes = flattenTree({
@@ -32,13 +53,9 @@ export const useCreateNode = (
 
     const [flatRoot] = flattenedNodes;
 
-    if (!flatRoot) {
-      return null;
-    }
-
     flatRoot.parent = parentNode;
 
-    const siblings = accessChildren(parentNode.data) || [] as NodeData[];
+    const siblings: NodeData[]  = accessChildren(parentNode.data) || [];
 
     switch (position) {
       case "start":
@@ -48,9 +65,15 @@ export const useCreateNode = (
         siblings.push(newNode);
         break;
       default:
+        if (typeof position !== "number") {
+          throw new Error(
+            `Invalid argument for 'position': expected "start", "end", or a number, but received: ${JSON.stringify(position)}.`
+          );
+        }
         if (position < 0 || position > siblings.length) {
-          console.warn("Invalid position for new node");
-          return;
+          throw new Error(
+            `Invalid position value: ${position}. Must be between 0 and ${siblings.length} (inclusive) for parent node with id '${parentNode.id}'.`
+          );
         }
         siblings.splice(position, 0, newNode);
         break;
@@ -68,10 +91,13 @@ export const useCreateNode = (
       setFlatTree((prev) => [...prev])
     }
 
+    setFlatTree((prev) => [...prev])
+
+
     setFn((prev) => [...prev])
 
     return flatRoot;
-  }, [getNodeById, setFlatTree])
+  }, [getNodeById, setFlatTree, setFn, expandedMap, idToIndex])
 
   return createNode;
 }
