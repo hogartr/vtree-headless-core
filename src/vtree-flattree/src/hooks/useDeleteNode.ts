@@ -10,7 +10,8 @@ export const useDeleteNode = (
   idToIndex: IdToIndex, 
   setFlatTree: SetFlatTree,
   accessChildren: AccessChildren,
-  setFn: React.Dispatch<React.SetStateAction<NodeData[]>>,
+  setFn: React.Dispatch<React.SetStateAction<NodeData[]>> | undefined,
+  refresh: () => void,
 ): DeleteNode => {
   const deleteNode = useCallback((arg: Node | NodeId) => {
     let tempNode = arg;
@@ -25,13 +26,7 @@ export const useDeleteNode = (
       return;
     }
 
-    const index = idToIndex(node.id);
-    const visibleChildren = node.expanded ? getVisibleChildren(node, expandedMap.current) : [];
-    setFlatTree((prev) => {
-      return removeAt(prev, index - 1, visibleChildren.length + 1);
-    });
-
-    setFn((prev) => {
+    setFn?.((prev) => {
       const updatedData = [...prev];
       let siblings: NodeData[] = [];
       if (node.parent?.id === ROOT_NODE_ID) {
@@ -51,6 +46,8 @@ export const useDeleteNode = (
       }
       return updatedData;
     })
+
+    refresh();
   }, [getNodeById, expandedMap, idToIndex, setFlatTree])
 
   return deleteNode;

@@ -6,21 +6,22 @@ import type {
   GetNodeById, 
   CreateNode, 
   NodeData, 
-  ExpandedMap, 
-  AccessId, 
+  ExpandedMap,
   AccessChildren, 
-  IdToIndex 
+  IdToIndex, 
+  SetChildren
 } from "../types";
-import { isValidNodeId, flattenTree } from "../utils";
+import { isValidNodeId } from "../utils";
 
 export const useCreateNode = (
   getNodeById: GetNodeById,
   setFlatTree: SetFlatTree,
-  setFn: React.Dispatch<React.SetStateAction<NodeData[]>>,
-  accessId: AccessId,
+  setFn: React.Dispatch<React.SetStateAction<NodeData[]>> | undefined,
   accessChildren: AccessChildren,
+  setChildren: SetChildren | undefined,
   expandedMap: ExpandedMap,
   idToIndex: IdToIndex,
+  refresh: () => void,
 ): CreateNode => {
   // accessChildren and accessId are intentionally omitted from the dependency array
   // because they are not stable and only their initial definitions are needed.
@@ -43,19 +44,7 @@ export const useCreateNode = (
       );
     }
 
-    const flattenedNodes = flattenTree({
-      tree: [newNode], 
-      expandedMap,
-      accessChildren,
-      accessId,
-      parent: parentNode,
-    });
-
-    const [flatRoot] = flattenedNodes;
-
-    flatRoot.parent = parentNode;
-
-    const siblings: NodeData[]  = accessChildren(parentNode.data) || [];
+    const siblings: NodeData[]  = [...accessChildren(parentNode.data) || []];
 
     switch (position) {
       case "start":
@@ -79,24 +68,10 @@ export const useCreateNode = (
         break;
     }
 
-    if (parentNode.expanded) {
-      const index = idToIndex(parentNode.id);
+    setChildren?.(parentNode.data, siblings);
 
-      setFlatTree((prev) => [
-        ...prev.slice(0, index + 1), // Keep nodes up to the parent
-        ...flattenedNodes, // Insert new nodes after the parent
-        ...prev.slice(index + 1), // Keep remaining nodes after the parent
-      ]);
-    } else {
-      setFlatTree((prev) => [...prev])
-    }
-
-    setFlatTree((prev) => [...prev])
-
-
-    setFn((prev) => [...prev])
-
-    return flatRoot;
+    setFn?.((prev) => [...prev])
+    setTimeout(() => refresh(), 0);
   }, [getNodeById, setFlatTree, setFn, expandedMap, idToIndex])
 
   return createNode;

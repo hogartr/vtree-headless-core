@@ -5,7 +5,7 @@ import { isValidNodeId } from "../utils";
 export const useUpdateNode = (
   getNodeById: GetNodeById,
   setFlatTree: SetFlatTree,
-  setFn: React.Dispatch<React.SetStateAction<NodeData[]>>,
+  setFn: React.Dispatch<React.SetStateAction<NodeData[]>> | undefined,
   protectedFields: string[] = [],
 ): UpdateNode => {
   const updateNode = useCallback((arg: Node | NodeId, fields: NodeData) => {
@@ -26,7 +26,7 @@ export const useUpdateNode = (
       node.data[key] = value;
     }
 
-    setFn((prev) => [...prev])
+    setFn?.((prev) => [...prev])
   }, [getNodeById, setFlatTree])
 
   return updateNode;

@@ -17,13 +17,15 @@ import type {
   ChildrenAccessor,
   FlatTree,
   Actions,
+  SetChildren,
 } from "../types";
 
 export type UseFlatTreeArgs = {
   idAccessor?: IdAccessor;
   childrenAccessor?: ChildrenAccessor;
+  setChildren?: SetChildren;
   tree: NodeData[];
-  setFn: React.Dispatch<React.SetStateAction<any>>;
+  setFn?: React.Dispatch<React.SetStateAction<any>>;
   protectedFields?: string[];
 }
 
@@ -31,7 +33,7 @@ const defaultIdAccessor = (node: NodeData): unknown => node.id;
 
 const defaultChildrenAccessor = (node: NodeData): unknown => node.children
 
-export const useFlatTree = ({ tree, idAccessor = defaultIdAccessor, childrenAccessor = defaultChildrenAccessor, setFn, protectedFields = [] }: UseFlatTreeArgs): FlatTree => {
+export const useFlatTree = ({ tree, idAccessor = defaultIdAccessor, childrenAccessor = defaultChildrenAccessor, setChildren, setFn, protectedFields = [] }: UseFlatTreeArgs): FlatTree => {
   const accessId = useAccessId(idAccessor);
   const accessChildren = useAccessChildren(childrenAccessor);
   const expandedMap = useRef<ExpandedMap>(new Map()); 
@@ -48,9 +50,9 @@ export const useFlatTree = ({ tree, idAccessor = defaultIdAccessor, childrenAcce
   const getNodeById = useGetNodeById(flatTree, idToIndex);
 
   const toggleNode = useToggleNode(getNodeById, expandedMap, idToIndex, setFlatTree);
-  const deleteNode = useDeleteNode(getNodeById, expandedMap, idToIndex, setFlatTree, accessChildren, setFn);
+  const deleteNode = useDeleteNode(getNodeById, expandedMap, idToIndex, setFlatTree, accessChildren, setFn, refresh);
   const updateNode = useUpdateNode(getNodeById, setFlatTree, setFn, protectedFieldsRef.current);
-  const createNode = useCreateNode(getNodeById, setFlatTree, setFn, accessId, accessChildren, expandedMap.current, idToIndex);
+  const createNode = useCreateNode(getNodeById, setFlatTree, setFn, accessChildren, setChildren, expandedMap.current, idToIndex, refresh);
 
   const actions: Actions = useMemo(() => ({
     toggle: toggleNode,

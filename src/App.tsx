@@ -41,7 +41,7 @@ const Row = ({ node, flatTree, style }: RowProps) => (
           flatTree.actions.create({ 
             name: "Test", 
             id: new Date().getMilliseconds(), 
-            children: null }, node.id, "start"
+            children: null }, node.id, "end"
           )
           if (!node.expanded) {
             flatTree.actions.toggle(node)
@@ -64,6 +64,7 @@ const TreeView = () => {
   const flatTree = useFlatTree({
     tree: data,
     setFn: setData,
+    setChildren: (node, children) => { node.children = children },
   });
 
   console.log(data)

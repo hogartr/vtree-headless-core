@@ -10,13 +10,15 @@ export type DeleteNode = (arg: Node | NodeId) => void;
 
 export type UpdateNode = (arg: Node | NodeId, fields: NodeData) => void;
 
-export type CreateNode = (newNode: NodeData, parent: Node | NodeId, position: "start" | "end" | number) => Node;
+export type CreateNode = (newNode: NodeData, parent: Node | NodeId, position: "start" | "end" | number) => void;
 
 export type Update = (arg: Node | NodeId) => void;
 
 export type GetNodeById = (id: NodeId) => Node;
 
 export type Refresh = (treeArg?: NodeData[]) => void
+
+export type SetChildren = (node: NodeData, children: NodeData[]) => void;
 
 export type Node = {
   id: NodeId;
