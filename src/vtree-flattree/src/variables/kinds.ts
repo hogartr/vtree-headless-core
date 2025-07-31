@@ -1,1 +1,1 @@
-export const ROOT_NODE_ID = "__ROOT_NODE__";
+export const ROOT_NODE_ID = '__ROOT_NODE__';

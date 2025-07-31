@@ -1,8 +1,8 @@
-import type { Node } from "../types";
+import type { Node } from '../types';
 
-export const insertAt = (array: Node[], index: number, newNodes: Node[]): Node[] => [
+export const insertAt = (array: Node[], index: number, nodes: Node[]): Node[] => [
   ...array.slice(0, index + 1),
-  ...newNodes,
+  ...nodes,
   ...array.slice(index + 1),
 ];
 

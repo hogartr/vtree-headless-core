@@ -1,4 +1,4 @@
-import type { Node, ExpandedMap } from "../types";
+import type { Node, ExpandedMap } from '../types';
 
 export const getVisibleChildren = (node: Node, expandedMap: ExpandedMap): Node[] => {
   const visibleChildren: Node[] = [];
@@ -7,13 +7,13 @@ export const getVisibleChildren = (node: Node, expandedMap: ExpandedMap): Node[]
   }
   const populateVisibleChildren = (nodes: Node[], result: Node[]) => {
     for (let i = 0; i < nodes.length; i++) {
-      result.push(nodes[i])
+      result.push(nodes[i]);
       if (nodes[i].children !== null && expandedMap.has(nodes[i].id)) {
-        populateVisibleChildren(nodes[i].children as Node[], result)
+        populateVisibleChildren(nodes[i].children as Node[], result);
       }
     }
-  }
-  populateVisibleChildren(node.children, visibleChildren)
+  };
+  populateVisibleChildren(node.children, visibleChildren);
 
   return visibleChildren;
-}
+};

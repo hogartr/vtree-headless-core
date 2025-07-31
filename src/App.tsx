@@ -1,11 +1,10 @@
-import './App.css'
 import { useFlatTree } from './vtree-flattree/src';
 import { cities } from "./data/cities";
-import { dummy } from './data/dummy';
 import React, { useState } from 'react';
 import type { Node } from './vtree-flattree/src/types';
 import type { FlatTree } from './types';
 import { VariableSizeTree, AutoSizer } from './vtree-render/src';
+import './App.css'
 
 function App() {
   return (
@@ -41,7 +40,7 @@ const Row = ({ node, flatTree, style }: RowProps) => (
           flatTree.actions.create({ 
             name: "Test", 
             id: new Date().getMilliseconds(), 
-            children: null }, node.id, "end"
+            children: null }, node.id, "start"
           )
           if (!node.expanded) {
             flatTree.actions.toggle(node)
@@ -60,16 +59,12 @@ const Row = ({ node, flatTree, style }: RowProps) => (
 )
 
 const TreeView = () => {
-  const [ data, setData ] = useState(dummy);
+  const [ data, setData ] = useState(cities);
   const flatTree = useFlatTree({
     tree: data,
     setFn: setData,
     setChildren: (node, children) => { node.children = children },
   });
-
-  console.log(data)
-
-  console.log(flatTree.data)
 
   return (
     <AutoSizer>

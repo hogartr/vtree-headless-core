@@ -1,6 +1,6 @@
-import type { NodeId, NodeData } from "./";
+import type { NodeId, NodeData } from './';
 
-export type IsLeaf = (node: NodeData) => boolean
+export type IsLeaf = (node: NodeData) => boolean;
 export type AccessId = (node: NodeData) => NodeId;
 export type IdAccessor = (node: NodeData) => unknown;
 export type ChildrenAccessor = (node: NodeData) => unknown;
