@@ -71,7 +71,9 @@ const Row = ({ node, flatTree, style }: RowProps): React.ReactNode => (
     </div>
     <div className="ml-auto">
       <button
-        onClick={() => flatTree.actions.delete(node)}
+        onClick={() => {
+          flatTree.actions.delete(node);
+        }}
         className="bg-red-500 text-white px-2 py-1 rounded"
       >
         Delete
