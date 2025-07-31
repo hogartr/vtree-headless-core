@@ -1,19 +1,19 @@
-import { useVirtualizer, type Virtualizer, type Key } from "@tanstack/react-virtual";
-import { useCallback, useEffect, useMemo, useRef, type ComponentType } from "react";
-import type { FlatTree, Node } from "../types";
-import React from "react";
+import { useVirtualizer, type Virtualizer } from '@tanstack/react-virtual';
+import React, { useCallback, useEffect, useMemo, useRef, type ComponentType } from 'react';
 
-type RowProps = {
+import type { FlatTree, Node } from '../types';
+
+interface RowProps {
   flatTree: FlatTree;
   node: Node;
   style: React.CSSProperties;
 }
 
-type ItemSize = (node: Node) => number
+type ItemSize = (node: Node) => number;
 
 type RowComponent = ComponentType<RowProps>;
 
-type VariableSizeTreeProps = {
+interface VariableSizeTreeProps {
   children: RowComponent;
   flatTree: FlatTree;
   ref?: React.RefObject<Virtualizer<HTMLDivElement, Element>> | undefined;
@@ -24,19 +24,29 @@ type VariableSizeTreeProps = {
   testId?: string;
 }
 
-export const VariableSizeTree = React.memo(({ children: Row, flatTree, width, height, itemSize, ref, overscan = 0, testId }: VariableSizeTreeProps) => {
-  const parentRef = useRef<HTMLDivElement>(null)
+export const VariableSizeTree = React.memo(function VariableSizeTreeComponent({
+  children: Row,
+  flatTree,
+  width,
+  height,
+  itemSize,
+  ref,
+  overscan = 0,
+  testId,
+}: VariableSizeTreeProps) {
+  const parentRef = useRef<HTMLDivElement>(null);
 
-  const getItemSize = useCallback(itemSize, []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const getItemSize = useCallback((node: Node) => itemSize(node), []);
   const getItemKey = useCallback((index: number) => flatTree.data[index].id, [flatTree.data]);
 
   const rowVirtualizer = useVirtualizer({
     count: flatTree.data.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: (index) => getItemSize(flatTree.data[index]),
+    estimateSize: index => getItemSize(flatTree.data[index]),
     getItemKey,
     overscan,
-  })
+  });
 
   if (ref) {
     ref.current = rowVirtualizer;
@@ -59,39 +69,47 @@ export const VariableSizeTree = React.memo(({ children: Row, flatTree, width, he
           position: 'relative',
         }}
       >
-        {rowVirtualizer.getVirtualItems().map(({ index, start, key }) => 
-          <RenderRow index={index} start={start} flatTree={flatTree} Row={Row} getItemSize={getItemSize} key={key}/>
-        )}
+        {rowVirtualizer.getVirtualItems().map(({ index, start, key }) => (
+          <RenderRow
+            index={index}
+            start={start}
+            flatTree={flatTree}
+            Row={Row}
+            getItemSize={getItemSize}
+            key={key}
+          />
+        ))}
       </div>
     </div>
-  )
-})
+  );
+});
 
-type RenderRowProps = {
+interface RenderRowProps {
   Row: RowComponent;
   start: number;
   index: number;
   flatTree: FlatTree;
   getItemSize: ItemSize;
-  key: Key;
 }
 
-const RenderRow = React.memo(({index, start, flatTree, Row, getItemSize}: RenderRowProps) => {
+const RenderRow = React.memo(function RenderRowComponent({
+  index,
+  start,
+  flatTree,
+  Row,
+  getItemSize,
+}: RenderRowProps) {
   const height = getItemSize(flatTree.data[index]);
-  const style: React.CSSProperties = useMemo(() => ({
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: `${height}px`,
-    transform: `translateY(${start}px)`,
-  }), [start, height])
-  return (
-    <Row
-      style={style}
-      flatTree={flatTree}
-      node={flatTree.data[index]} 
-    />
-  )
-})
-        
+  const style: React.CSSProperties = useMemo(
+    () => ({
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: `${height}px`,
+      transform: `translateY(${start}px)`,
+    }),
+    [start, height]
+  );
+  return <Row style={style} flatTree={flatTree} node={flatTree.data[index]} />;
+});

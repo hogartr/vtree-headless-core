@@ -1,7 +1,12 @@
-import type React from "react";
-import { useResizeObserver } from "../hooks/useResizeObserver";
+import type React from 'react';
 
-export const AutoSizer = ({ children }: { children: ({ width, height }: { width: number, height: number}) => React.JSX.Element}) => {
+import { useResizeObserver } from '../hooks/useResizeObserver';
+
+export const AutoSizer = ({
+  children,
+}: {
+  children: ({ width, height }: { width: number; height: number }) => React.JSX.Element;
+}) => {
   const { ref, width, height } = useResizeObserver();
 
   return (
@@ -9,4 +14,4 @@ export const AutoSizer = ({ children }: { children: ({ width, height }: { width:
       {children({ width, height })}
     </div>
   );
-}
+};

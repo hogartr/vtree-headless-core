@@ -9,8 +9,8 @@ export const useResizeObserver = () => {
     const element = ref.current;
     if (!element) return;
 
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (let entry of entries) {
+    const resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
         setSize({
           width: entry.contentRect.width,
           height: entry.contentRect.height,
@@ -26,4 +26,4 @@ export const useResizeObserver = () => {
   }, []);
 
   return { ref, width: size.width, height: size.height };
-}
+};
