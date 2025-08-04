@@ -1,7 +1,8 @@
 import { useCallback } from 'react';
+import type { NodeData } from '@vtree-headless/types';
 
 import * as check from '../../utils/validation';
-import type { NodeData, AccessChildren, AccessChildrenReturn, ChildrenAccessor } from '../../types';
+import type { AccessChildren, AccessChildrenReturn, ChildrenAccessor } from '../../types';
 
 export const useAccessChildren = (childrenAccessor: ChildrenAccessor): AccessChildren => {
   const accessChildren = useCallback((node: NodeData): AccessChildrenReturn => {

@@ -1,14 +1,7 @@
 import { useCallback } from 'react';
+import type { Node, NodeId, GetNodeById, ToggleNode } from '@vtree-headless/types';
 
-import type {
-  Node,
-  NodeId,
-  SetFlatTree,
-  GetNodeById,
-  ExpandedMap,
-  IdToIndex,
-  ToggleNode,
-} from '../../types';
+import type { SetFlatTree, ExpandedMap, IdToIndex } from '../../types';
 import { isValidNodeId, getVisibleChildren, insertAt, removeAt } from '../../utils';
 
 interface UseToggleNodeArgs {

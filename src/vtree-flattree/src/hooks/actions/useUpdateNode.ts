@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
+import type { Node, NodeId, GetNodeById, UpdateNode, NodeData } from '@vtree-headless/types';
 
-import type { Node, NodeId, GetNodeById, UpdateNode, NodeData } from '../../types';
 import { isValidNodeId } from '../../utils';
 
 interface UseUpdateNodeArgs {

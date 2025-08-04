@@ -1,4 +1,4 @@
-import type { NodeId, NodeData } from './';
+import type { NodeId, NodeData } from '@vtree-headless/types';
 
 export type IsLeaf = (node: NodeData) => boolean;
 export type AccessId = (node: NodeData) => NodeId;

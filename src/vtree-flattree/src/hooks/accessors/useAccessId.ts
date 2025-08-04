@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
+import type { NodeData, NodeId } from '@vtree-headless/types';
 
 import * as check from '../../utils/validation';
-import type { NodeData, NodeId } from '../../types';
 
 export const useAccessId = (
   idAccessor: (node: NodeData) => unknown

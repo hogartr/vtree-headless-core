@@ -1,14 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
+import type { NodeData, Node, Refresh } from '@vtree-headless/types';
 
-import type {
-  NodeData,
-  Node,
-  ExpandedMap,
-  AccessChildren,
-  AccessId,
-  SetFlatTree,
-  Refresh,
-} from '../../types';
+import type { ExpandedMap, AccessChildren, AccessId, SetFlatTree } from '../../types';
 import { flattenTree } from '../../utils';
 
 interface UseFlaTreeStateArgs {

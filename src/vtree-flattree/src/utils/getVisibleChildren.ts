@@ -1,4 +1,6 @@
-import type { Node, ExpandedMap } from '../types';
+import type { Node } from '@vtree-headless/types';
+
+import type { ExpandedMap } from '../types';
 
 export const getVisibleChildren = (node: Node, expandedMap: ExpandedMap): Node[] => {
   const visibleChildren: Node[] = [];

@@ -1,4 +1,6 @@
-import type { ExpandedMap, AccessId, AccessChildren, Node, NodeData } from '../types';
+import type { Node, NodeData } from '@vtree-headless/types';
+
+import type { ExpandedMap, AccessId, AccessChildren } from '../types';
 import { ROOT_NODE_ID } from '../variables/kinds';
 
 interface FlattenTree {
@@ -15,7 +17,7 @@ export const flattenTree = ({
   accessId,
   accessChildren,
   parent,
-}: FlattenTree) => {
+}: FlattenTree): Node[] => {
   const flatTree: Node[] = [];
 
   const rootNode: Node = parent || {

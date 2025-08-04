@@ -1,15 +1,7 @@
 import { useMemo, useRef } from 'react';
+import type { NodeData, FlatTree, Actions, SetChildren, T } from '@vtree-headless/types';
 
-import type {
-  ExpandedMap,
-  NodeData,
-  IdAccessor,
-  ChildrenAccessor,
-  FlatTree,
-  Actions,
-  SetChildren,
-  T,
-} from '../types';
+import type { ExpandedMap, IdAccessor, ChildrenAccessor } from '../types';
 
 import {
   useAccessId,

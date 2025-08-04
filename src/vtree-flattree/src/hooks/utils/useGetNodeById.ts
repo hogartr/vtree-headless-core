@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
+import type { NodeId, Node, GetNodeById } from '@vtree-headless/types';
 
-import type { NodeId, Node, IdToIndex, GetNodeById } from '../../types';
+import type { IdToIndex } from '../../types';
 
 interface UseGetNodeById {
   flatTree: Node[];

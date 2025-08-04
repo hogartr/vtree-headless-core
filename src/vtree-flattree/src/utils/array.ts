@@ -1,4 +1,4 @@
-import type { Node } from '../types';
+import type { Node } from '@vtree-headless/types';
 
 export const insertAt = (array: Node[], index: number, nodes: Node[]): Node[] => [
   ...array.slice(0, index + 1),

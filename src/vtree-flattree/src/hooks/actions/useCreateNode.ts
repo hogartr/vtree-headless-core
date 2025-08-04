@@ -1,16 +1,15 @@
-import React, { useCallback } from 'react';
-
+import { useCallback } from 'react';
 import type {
   Node,
   NodeId,
   GetNodeById,
   CreateNode,
   NodeData,
-  ExpandedMap,
-  AccessChildren,
-  IdToIndex,
   SetChildren,
-} from '../../types';
+  Refresh,
+} from '@vtree-headless/types';
+
+import type { ExpandedMap, AccessChildren, IdToIndex } from '../../types';
 import { isValidNodeId } from '../../utils';
 
 interface UseCreateNodeArgs {
@@ -20,7 +19,7 @@ interface UseCreateNodeArgs {
   setChildren: SetChildren | undefined;
   expandedMap: ExpandedMap;
   idToIndex: IdToIndex;
-  refresh: () => void;
+  refresh: Refresh;
 }
 
 export const useCreateNode = ({
@@ -80,8 +79,11 @@ export const useCreateNode = ({
 
       setChildren?.(parentNode.data, siblings);
 
-      setFn?.(prev => [...prev]);
-      setTimeout(() => refresh(), 0);
+      setFn?.(prev => {
+        const copy = [...prev];
+        refresh(copy);
+        return copy;
+      });
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [getNodeById, setFn, expandedMap, idToIndex, refresh, setChildren]

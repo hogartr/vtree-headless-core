@@ -1,6 +1,6 @@
-import type { NodeData, T } from '../types';
+import type { NodeData, T } from '@vtree-headless/types';
 
-export const nodeExists = (node: NodeData) => {
+export const nodeExists = (node: NodeData): void => {
   if (!node) {
     throw new Error(`
       The provided node does not exist/is falsy.
