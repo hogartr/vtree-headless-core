@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import type { Node, FlatTree } from '@vtree-headless/types';
+import { useFlatTree } from '@vtree-headless/flattree';
+import { ChevronDownIcon, ChevronRightIcon } from '@icons';
 
-import { useFlatTree } from './vtree-flattree/src';
 import { cities } from './data/cities';
-import type { Node } from './vtree-flattree/src/types';
-import type { FlatTree } from './types';
 import { VariableSizeTree, AutoSizer } from './vtree-render/src';
 import './App.css';
 
@@ -11,7 +11,7 @@ const App = (): React.ReactNode => {
   return (
     <div className="h-screen flex flex-col items-center justify-center gap-4">
       <h1 className="flex-none">Virtualized TreeView</h1>
-      <div className="flex grow w-full">
+      <div className="w-full h-screen">
         <TreeView />
       </div>
       <p className="read-the-docs flex-none">Click on the Vite and React logos to learn more</p>
@@ -26,20 +26,11 @@ interface RowProps {
 }
 
 const Row = ({ node, flatTree, style }: RowProps): React.ReactNode => (
-  <div
-    key={node.id}
-    style={{ ...style, marginLeft: 20 * node.level }}
-    className="flex flex-row justify-start items-center"
-  >
+  <RowWrapper node={node} style={style}>
     {node.children?.length && node.children?.length > 0 && (
-      <div
-        onClick={() => flatTree.actions.toggle(node)}
-        style={{ width: 24, height: 24, border: '1px solid white' }}
-      >
-        <span>{node.expanded ? '-' : '+'}</span>
-      </div>
+      <ToggleButton node={node} flatTree={flatTree} />
     )}
-    <span>{node.data.name}</span>
+    <NodeName>{node.data.name}</NodeName>
     <div className="ml-auto">
       <button
         onClick={() => {
@@ -79,8 +70,42 @@ const Row = ({ node, flatTree, style }: RowProps): React.ReactNode => (
         Delete
       </button>
     </div>
+  </RowWrapper>
+);
+
+interface RowWrapper {
+  children: React.ReactNode;
+  node: Node;
+  style: React.CSSProperties;
+}
+
+const RowWrapper = ({ children, node, style }: RowWrapper): React.ReactElement => (
+  <div
+    key={node.id}
+    style={{ ...style, marginLeft: 20 * node.level }}
+    className="flex flex-row justify-start items-center"
+  >
+    {children}
   </div>
 );
+
+interface ToggleButtonProps {
+  node: Node;
+  flatTree: FlatTree;
+  size?: number;
+}
+
+const ToggleButton = ({ node, flatTree, size = 36 }: ToggleButtonProps): React.ReactElement => (
+  <div onClick={() => flatTree.actions.toggle(node)}>
+    <img width={size} height={size} src={node.expanded ? ChevronDownIcon : ChevronRightIcon} />
+  </div>
+);
+
+interface NodeNameProps {
+  children: string;
+}
+
+const NodeName = ({ children }: NodeNameProps): React.ReactElement => <span>{children}</span>;
 
 const TreeView = (): React.ReactNode => {
   const [data, setData] = useState(cities);

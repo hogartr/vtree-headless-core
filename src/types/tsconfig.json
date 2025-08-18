@@ -1,17 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES2023",
-    "lib": ["ES2023", "dom"],
+    "lib": ["ES2023"],
     "module": "ESNext",
     "declaration": true,
-    "emitDeclarationOnly": false,
-    "declarationDir": "dist",
-    "rootDir": "src",
+    "emitDeclarationOnly": true,
     "outDir": "dist",
+    "rootDir": "src",
     "strict": true,
-    "jsx": "react-jsx",
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "node",
   },
   "include": ["src"]
 }
