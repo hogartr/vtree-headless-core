@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { Node, FlatTree } from '@vtree-headless/types';
 import { useFlatTree } from '@vtree-headless/flattree';
-import { ChevronDownIcon, ChevronRightIcon } from '@icons';
+import { ChevronDownIcon, ChevronRightIcon, AddIcon, DeleteIcon, EditIcon } from '@icons';
 
 import { cities } from './data/cities';
 import { VariableSizeTree, AutoSizer } from './vtree-render/src';
@@ -14,7 +14,7 @@ const App = (): React.ReactNode => {
       <div className="w-full h-screen">
         <TreeView />
       </div>
-      <p className="read-the-docs flex-none">Click on the Vite and React logos to learn more</p>
+      <p className="read-the-docs flex-none pb-5">Drag-and-drop coming soon.</p>
     </div>
   );
 };
@@ -27,12 +27,16 @@ interface RowProps {
 
 const Row = ({ node, flatTree, style }: RowProps): React.ReactNode => (
   <RowWrapper node={node} style={style}>
-    {node.children?.length && node.children?.length > 0 && (
-      <ToggleButton node={node} flatTree={flatTree} />
-    )}
-    <NodeName>{node.data.name}</NodeName>
-    <div className="ml-auto">
-      <button
+    <div className="flex flex-row items-center gap-2">
+      {node.children?.length && node.children?.length > 0 && (
+        <ToggleButton node={node} flatTree={flatTree} />
+      )}
+      <NodeName>{node.data.name}</NodeName>
+    </div>
+    <div className="flex flex-row items-center gap-3 pe-4">
+      <IconButton
+        icon={AddIcon}
+        className="p-2"
         onClick={() => {
           flatTree.actions.create(
             {
@@ -47,28 +51,19 @@ const Row = ({ node, flatTree, style }: RowProps): React.ReactNode => (
             flatTree.actions.toggle(node);
           }
         }}
-        className="bg-red-500 text-white px-2 py-1 rounded"
-      >
-        Create
-      </button>
-    </div>
-    <div className="ml-auto">
-      <button
+      />
+      <IconButton
+        icon={EditIcon}
+        className="p-2"
         onClick={() => flatTree.actions.update(node, { name: node.data.name + ' HA' })}
-        className="bg-red-500 text-white px-2 py-1 rounded"
-      >
-        Update
-      </button>
-    </div>
-    <div className="ml-auto">
-      <button
+      />
+      <IconButton
+        icon={DeleteIcon}
+        className="p-2"
         onClick={() => {
           flatTree.actions.delete(node);
         }}
-        className="bg-red-500 text-white px-2 py-1 rounded"
-      >
-        Delete
-      </button>
+      />
     </div>
   </RowWrapper>
 );
@@ -82,8 +77,8 @@ interface RowWrapper {
 const RowWrapper = ({ children, node, style }: RowWrapper): React.ReactElement => (
   <div
     key={node.id}
-    style={{ ...style, marginLeft: 20 * node.level }}
-    className="flex flex-row justify-start items-center"
+    style={{ ...style, paddingLeft: 20 * node.level }}
+    className="flex flex-row justify-between items-center"
   >
     {children}
   </div>
@@ -96,8 +91,26 @@ interface ToggleButtonProps {
 }
 
 const ToggleButton = ({ node, flatTree, size = 36 }: ToggleButtonProps): React.ReactElement => (
-  <div onClick={() => flatTree.actions.toggle(node)}>
-    <img width={size} height={size} src={node.expanded ? ChevronDownIcon : ChevronRightIcon} />
+  <IconButton
+    icon={node.expanded ? ChevronDownIcon : ChevronRightIcon}
+    onClick={() => flatTree.actions.toggle(node)}
+    size={size}
+  />
+);
+
+const IconButton = ({
+  icon,
+  onClick,
+  size = 18,
+  className = '',
+}: {
+  icon: string;
+  onClick: () => void;
+  size?: number;
+  className?: string;
+}): React.ReactElement => (
+  <div onClick={onClick} className={'hover:cursor-pointer hover:bg-gray-700 rounded ' + className}>
+    <img width={size} height={size} src={icon} />
   </div>
 );
 
