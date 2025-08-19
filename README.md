@@ -12,12 +12,12 @@ Together, they enable smooth handling of **10,000+ nodes**, with support for exp
 
 ## ✨ Features
 
-- 🔄 **Headless architecture** – use only what you need (data, rendering, or both).  
+- 🔄 **Headless architecture** – use only what you need (flattree or flattree + rendering).  
 - 📂 **Expand/Collapse** – efficient recalculation of visible nodes.  
 - ⚡ **Performance-first design** – proven to handle **10,000+ nodes smoothly**.  
-- ➕ **Tree mutations** – add, delete, move, duplicate nodes via clean APIs.  
+- ➕ **Tree mutations** – expand/collapse, add, delete, update nodes via clean APIs.
 - 🎨 **Rendering utilities** – integrate with React Window, Virtuoso, or roll your own.  
-- 🧩 **TypeScript support** – strong typing for predictable development.  
+- 🧩 **TypeScript support** – strong typing for predictable development.
 
 ---
 
