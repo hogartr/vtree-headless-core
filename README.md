@@ -28,7 +28,7 @@ Together, they enable smooth handling of **10,000+ nodes**, with support for exp
 npm install @vtree-headless/flattree
 
 # Rendering helpers (optional)
-npm install @vtree-headless/
+npm install @vtree-headless/render
 ```
 
 ## 🛠️ Usage
