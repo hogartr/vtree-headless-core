@@ -117,6 +117,7 @@ const TreeView = (): React.ReactNode => {
 
 ## 🏗️ Roadmap
 
+- Improve README + documentation
 - Drag-and-drop support
 - Add Unit testing
 - Benchmarks & performance dashboard
