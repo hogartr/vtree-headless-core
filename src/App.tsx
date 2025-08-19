@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import type { Node, FlatTree } from '@vtree-headless/types';
 import { useFlatTree } from '@vtree-headless/flattree';
 import { ChevronDownIcon, ChevronRightIcon, AddIcon, DeleteIcon, EditIcon } from '@icons';
+import { VariableSizeTree, AutoSizer } from '@vtree-headless/render';
 
 import { cities } from './data/cities';
-import { VariableSizeTree, AutoSizer } from './vtree-render/src';
 import './App.css';
 
 const App = (): React.ReactNode => {

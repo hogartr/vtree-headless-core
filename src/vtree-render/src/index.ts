@@ -1,3 +1,3 @@
-export * from './components/VariableSizeTree';
-export * from './hooks/useResizeObserver';
-export * from './components/AutoSizer';
+export { VariableSizeTree } from './components/VariableSizeTree';
+export { useResizeObserver } from './hooks/useResizeObserver';
+export { AutoSizer } from './components/AutoSizer';

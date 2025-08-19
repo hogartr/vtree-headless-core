@@ -1,69 +1,135 @@
-# React + TypeScript + Vite
+# vtree-headless-core 🌲
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modular **headless React tree library** designed for **performance, scalability, and developer freedom**.  
+Split into two packages for maximum flexibility:
 
-Currently, two official plugins are available:
+- **`@vtree-headless/flattree`** → core logic for flattening and managing tree state  
+- **`@vtree-headless/render`** → rendering utilities for virtualization and UI integration  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Together, they enable smooth handling of **10,000+ nodes**, with support for expand/collapse, mutations, and high-performance rendering.  
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ✨ Features
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- 🔄 **Headless architecture** – use only what you need (data, rendering, or both).  
+- 📂 **Expand/Collapse** – efficient recalculation of visible nodes.  
+- ⚡ **Performance-first design** – proven to handle **10,000+ nodes smoothly**.  
+- ➕ **Tree mutations** – add, delete, move, duplicate nodes via clean APIs.  
+- 🎨 **Rendering utilities** – integrate with React Window, Virtuoso, or roll your own.  
+- 🧩 **TypeScript support** – strong typing for predictable development.  
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🚀 Installation
+
+```bash
+# Core tree state + flattening
+npm install @vtree-headless/flattree
+
+# Rendering helpers (optional)
+npm install @vtree-headless/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🛠️ Usage
+# Core (Flattening + State Management)
+```tsx
+import { useFlatTree } from "@vtree-headless/flattree";
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+const data = [
+  { id: "1", name: "Root", children: [{ id: "2", name: "Child" }] }
+];
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
+const TreeView = (): React.ReactNode => {
+  const [data, setData] = useState(cities);
+  const flatTree = useFlatTree({
+    tree: data,
+    setFn: setData,
+    setChildren: (node, children) => {
+      node.children = children;
     },
-  },
-])
+  });
+
+  return (
+    <ul>
+      {flatTree.data.map(node => (
+        <li key={node.id}>
+          {node.name}
+          <button onClick={() => tree.toggleNode(node.id)}>
+            {node.isExpanded ? "Collapse" : "Expand"}
+          </button>
+        </li>
+      ))}
+    </ul>
+  );
+}
 ```
+# Rendering with Virtualization
+```tsx
+import { useFlatTree } from "@vtree-headless/flattree";
+import { VariableSizeTree, AutoSizer } from "@vtree-headless/render";
+
+interface RowProps {
+  node: Node;
+  flatTree: FlatTree;
+  style: React.CSSProperties;
+}
+
+const Row = ({ node, flatTree, style }: RowProps): React.ReactNode => (
+  <div style={style}>
+    ...
+  </div>
+);
+
+const TreeView = (): React.ReactNode => {
+  const [data, setData] = useState(cities);
+  const flatTree = useFlatTree({
+    tree: data,
+    setFn: setData,
+    setChildren: (node, children) => {
+      node.children = children;
+    },
+  });
+
+  return (
+    <AutoSizer>
+      {({ width, height }) => (
+        <VariableSizeTree
+          itemSize={node => (node.level > 0 ? 64 : 48)}
+          height={height}
+          width={width}
+          overscan={0}
+          flatTree={flatTree}
+        >
+          {Row}
+        </VariableSizeTree>
+      )}
+    </AutoSizer>
+  );
+};
+```
+
+## 📊 Example Use Cases
+
+- Large-scale directory structures (file explorers, IDE-like UIs).
+- Enterprise SaaS apps with deeply nested data (projects, org charts, configs).
+- Optimized frontends where 10k+ nodes need to remain smooth and responsive.
+
+## 🏗️ Roadmap
+
+- Drag-and-drop support
+- Add Unit testing
+- Benchmarks & performance dashboard
+
+## 📈 Performance
+
+Both packages are designed to handle 10,000+ nodes efficiently.
+@vtree-headless/flattree maintains a map of nodes for fast lookups, while @vtree-headless/render ensures only visible nodes are rendered.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
+## 📜 License
+
+MIT

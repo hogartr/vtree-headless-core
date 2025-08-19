@@ -1,7 +1,6 @@
 import { useVirtualizer, type Virtualizer } from '@tanstack/react-virtual';
 import React, { useCallback, useMemo, useRef, type ComponentType } from 'react';
-
-import type { FlatTree, Node } from '../types';
+import type { Node, FlatTree } from '@vtree-headless/types';
 
 interface RowProps {
   flatTree: FlatTree;
